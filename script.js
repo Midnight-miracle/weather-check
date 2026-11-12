@@ -1,6 +1,6 @@
 // ── Configuration ──────────────────────────────────────────────
-const FORECAST_URL = "https://api.weatherapi.com/v1/forecast.json";
-const SEARCH_URL = "https://api.weatherapi.com/v1/search.json";
+const FORECAST_URL = "/api/forecast";
+const SEARCH_URL = "/api/search";
 const STORAGE_KEY = "weatherapp.savedCities";
 // ───────────────────────────────────────────────────────────────
 
@@ -115,7 +115,7 @@ searchInput.addEventListener("input", (e) => {
     // Wait 300ms after user stops typing before calling API
     searchTimeout = setTimeout(async () => {
         try {
-            const res = await fetch(`${SEARCH_URL}?key=${API_KEY}&q=${encodeURIComponent(query)}`);
+            const res = await fetch(`${SEARCH_URL}?q=${encodeURIComponent(query)}`);
             const data = await res.json();
 
             suggestionsList.innerHTML = "";
@@ -160,7 +160,7 @@ async function fetchWeather(query, options = {}) {
 
     try {
         // The free plan returns 3 days in total: today plus the 2 forecast days.
-        const res = await fetch(`${FORECAST_URL}?key=${API_KEY}&q=${encodeURIComponent(query)}&days=3&aqi=no`);
+        const res = await fetch(`${FORECAST_URL}?q=${encodeURIComponent(query)}`);
 
         if (!res.ok) {
             const payload = await res.json().catch(() => null);
