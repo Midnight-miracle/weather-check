@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+    <link rel="stylesheet" href="style.css?v=4" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+    <script src="config.js" defer></script>
+    <script src="script.js?v=5" defer></script>
+  </head>
+
+  <body>
+    <div class="app-container">
+      <aside class="sidebar">
+        <div class="logo"><p>WeatherApp</p></div>
+        <nav class="sidebar-links">
+          <a href="#" class="active" data-view="weather">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="8.5" cy="8.5" r="3"/>
+              <path d="M8.5 2.5v1.6M8.5 12.9v1.6M2.5 8.5h1.6M12.9 8.5h1.6M4.3 4.3l1.1 1.1M11.6 11.6l1.1 1.1M12.7 4.3l-1.1 1.1"/>
+              <path d="M12.8 18.6h5.4a2.9 2.9 0 0 0 .3-5.8 4.1 4.1 0 0 0-7.8-.9 2.8 2.8 0 0 0 2.1 6.7Z"/>
+            </svg>
+            <span>Weather</span>
+          </a>
+          <a href="#" data-view="cities">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 21V9.5l5-3v14.5M8 21V11l6-3v13"/>
+              <path d="M14 21V12.5l7 3V21"/>
+              <path d="M2 21h20"/>
+            </svg>
+            <span>Cities</span>
+          </a>
+          <a href="#" data-view="map">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 4 3 6.6v13.8L9 17.8l6 2.6 6-2.6V4l-6 2.6L9 4Z"/>
+              <path d="M9 4v13.8M15 6.6v13.8"/>
+            </svg>
+            <span>Map</span>
+          </a>
+          <a href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 7h11M4 12h6M4 17h12"/>
+              <circle cx="18" cy="7" r="2"/>
+              <circle cx="13" cy="12" r="2"/>
+              <circle cx="19" cy="17" r="2"/>
+            </svg>
+            <span>Settings</span>
+          </a>
+          <a id="account" href="#">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="8.5" r="3.5"/>
+              <path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>
+            </svg>
+            <span>Account</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="main-content">
+        <header class="top-bar">
+          <div class="search-container">
+            <div class="search-box">
+              <input id="search" type="text" placeholder="Search for a city..." autocomplete="off">
+              <button id="searchBtn" aria-label="Search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="6.4"/>
+                  <path d="m16 16 4.4 4.4"/>
+                </svg>
+              </button>
+            </div>
+            <ul id="suggestions-list" class="suggestions-hidden"></ul>
+          </div>
+          <div class="datetime" id="datetime"></div>
+        </header>
+
+        <!-- Weather view -->
+        <section class="view" id="view-weather">
+          <div class="weather-display">
+            <div class="weather-main-panel">
+              <div id="weather-place">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/>
+                  <circle cx="12" cy="10" r="2.6"/>
+                </svg>
+                <h3>City, State</h3>
+              </div>
+
+              <div id="temperature-container">
+                <div id="temp">--</div>
+                <div id="tempType">
+                  <h3>Loading...</h3>
+                  <img src="" alt="" id="main-weather-icon" style="display: none;">
+                </div>
+              </div>
+
+              <div class="weather-meta-metrics">
+                <p class="feels-like">Feels like --°C</p>
+                <div class="hi-lo-container">
+                  <span>H: --°</span>
+                  <span>L: --°</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="otherDetails">
+              <h4 class="panel-title">Current Conditions</h4>
+              <div class="conditions-grid">
+                <div class="condition-item">
+                  <span class="cond-label">💧 Humidity</span>
+                  <span class="cond-val" id="humidity-val">--%</span>
+                </div>
+                <div class="condition-item">
+                  <span class="cond-label">🌬 Wind</span>
+                  <span class="cond-val" id="wind-val">-- km/h</span>
+                </div>
+                <div class="condition-item">
+                  <span class="cond-label">🧭 Direction</span>
+                  <span class="cond-val" id="wind-dir-val">--</span>
+                </div>
+                <div class="condition-item">
+                  <span class="cond-label">☀️ UV Index</span>
+                  <span class="cond-val" id="uv-val">--</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <section id="forecast" class="forecast-section" style="display: none;">
+              <h4 class="forecast-title">2-Day Forecast</h4>
+              <div class="forecast-container" id="forecast-container">
+                  <!-- Forecast blocks will be injected here by JS -->
+              </div>
+          </section>
+        </section>
+
+        <!-- Cities view -->
+        <section class="view" id="view-cities" hidden>
+          <div class="view-head">
+            <h2>Cities</h2>
+            <p class="view-sub">Save the places you check often, then open them in one tap.</p>
+          </div>
+
+          <div class="cities-toolbar">
+            <button type="button" id="save-city" class="btn-primary" disabled>Save current city</button>
+            <span id="save-status" class="save-status" role="status" aria-live="polite"></span>
+          </div>
+
+          <ul id="saved-cities" class="city-grid"></ul>
+          <p id="saved-empty" class="empty-state">No saved cities yet — search for a place, then save it here.</p>
+
+          <h4 class="panel-title popular-title">Popular</h4>
+          <div id="popular-cities" class="city-grid"></div>
+        </section>
+
+        <!-- Map view -->
+        <section class="view" id="view-map" hidden>
+          <div class="view-head">
+            <h2>Map</h2>
+            <p class="view-sub">Tap any point on the map to load its weather.</p>
+          </div>
+
+          <div class="map-shell">
+            <div id="map" role="application" aria-label="Weather map"></div>
+          </div>
+          <p class="map-readout" id="map-readout">Tap the map to load weather for that point.</p>
+        </section>
+
+      </main>
+    </div>
+
+    <script>
+      function updateDatetime() {
+        const el = document.getElementById('datetime');
+        if (!el) return;
+        const now = new Date();
+        const opts = { weekday: 'long', month: 'short', day: 'numeric' };
+        const date = now.toLocaleDateString('en-US', opts);
+        const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        el.textContent = `${date} · ${time}`;
+      }
+      updateDatetime();
+      setInterval(updateDatetime, 60000);
+    </script>
+  </body>
+</html>
