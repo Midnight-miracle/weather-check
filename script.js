@@ -120,7 +120,7 @@ searchInput.addEventListener("input", (e) => {
 
             suggestionsList.innerHTML = "";
 
-            if (data.length > 0) {
+            if (Array.isArray(data) && data.length > 0) {
                 data.forEach(location => {
                     const li = document.createElement("li");
                     li.className = "suggestions-list-item";
